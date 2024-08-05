@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<!--Lahore-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WEATHER APPLICATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Calistoga&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="codee.css">
+    <script src="codee.js" defer></script>
+</head>
+
+<body>
+    <form class="weatherform">
+        <input type="text" class="inputcity" placeholder="Please enter the city">
+        <button type="submit">Get Weather</button>
+    </form>
+    <div class="weathercard">
+        <h1 id="cityname">City</h1>
+        <p id="temp">Temperature</p>
+        <p id="weather">Weather cond</p>
+        <p id="humidity">humidity</p>
+        <p id="emoji">symbol</p>
+        <p id="displayerror">Please enter the city!</p>
+    </div>
+</body>
+
+</html>body {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    font-family: "Calistoga", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('clouds-3488632_1280.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.weatherform {
+    margin: 20px;
+    justify-content: space-between;
+}
+
+.inputcity {
+    font-size: 1.5rem;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+button {
+    font-size: 1.5rem;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 10px;
+    background-color: chartreuse;
+    margin: 0px 5px;
+}
+
+button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: darkred;
+    color: white;
+
+}
+
+.weathercard {
+    padding: 50px;
+    min-width: 300px;
+    box-shadow: 2px 2px 5px black;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    backdrop-filter: blur(20px);
+    background: transparent;
+}
+
+h1 {
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1.5rem;
+    color: cyan;
+    font-style: italic;
+    margin: 5px 0;
+
+}
+
+#temp {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#humidity {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+#emoji {
+    font-size: 7.5rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+#displayerror {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}const weatherform = document.querySelector(".weatherform");
+const inputcity = document.querySelector(".inputcity");
+const weathercard = document.querySelector(".weathercard");
+const apikey = "476f21fc1a1acfb73f2a5c635e1d2505";
+
+weatherform.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const city = inputcity.value;
+
+    if (city) {
+        try {
+            const weatherData = await getWeatherData(city);
+            displayWeatherInfo(weatherData);
+        } catch (error) {
+            console.error(error);
+            displayError(error.message);
+        }
+    } else {
+        displayError("Please enter a city");
+    }
+});
+
+async function getWeatherData(city) {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${"476f21fc1a1acfb73f2a5c635e1d2505"}`;
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+        throw new Error("Could not fetch weather data");
+    }
+
+    return await response.json();
+}
+
+function displayWeatherInfo(data) {
+    const { name: city, main: { temp: temperature, humidity }, weather: [{ description, id }] } = data;
+
+    weathercard.innerHTML = "";
+    weathercard.style.display = "flex";
+
+    const cityDisplay = document.createElement("h1");
+    const tempDisplay = document.createElement("p");
+    const humidityDisplay = document.createElement("p");
+    const descDisplay = document.createElement("p");
+    const weatherEmoji = document.createElement("p");
+
+    cityDisplay.textContent = city;
+    tempDisplay.textContent = `${((temperature - 273.15) * 9 / 5 + 32).toFixed(1)}°F`;
+    humidityDisplay.textContent = `Humidity: ${humidity}%`;
+    descDisplay.textContent = description;
+    weatherEmoji.textContent = getWeatherEmoji(id);
+
+    cityDisplay.classList.add("cityDisplay");
+    tempDisplay.classList.add("tempDisplay");
+    humidityDisplay.classList.add("humidityDisplay");
+    descDisplay.classList.add("descDisplay");
+    weatherEmoji.classList.add("weatherEmoji");
+
+    weathercard.appendChild(cityDisplay);
+    weathercard.appendChild(tempDisplay);
+    weathercard.appendChild(humidityDisplay);
+    weathercard.appendChild(descDisplay);
+    weathercard.appendChild(weatherEmoji);
+}
+
+function getWeatherEmoji(weatherId) {
+    switch (true) {
+        case (weatherId >= 200 && weatherId < 300):
+            return "⛈️";
+        case (weatherId >= 300 && weatherId < 400):
+            return "🌧️";
+        case (weatherId >= 500 && weatherId < 600):
+            return "🌦️";
+        case (weatherId >= 600 && weatherId < 700):
+            return "❄️";
+        case (weatherId >= 700 && weatherId < 800):
+            return "🌫️";
+        case (weatherId === 800):
+            return "☀️";
+        case (weatherId >= 801 && weatherId < 810):
+            return "🌤️";
+        default:
+            return "❓";
+    }
+}
+
+function displayError(message) {
+    const errorDisplay = document.createElement("p");
+    errorDisplay.textContent = message;
+    errorDisplay.classList.add("errorDisplay");
+
+    weathercard.innerHTML = "";
+    weathercard.style.display = "flex";
+    weathercard.appendChild(errorDisplay);
+}
