@@ -28,7 +28,8 @@
     </div>
 </body>
 
-</html>body {
+</html>
+body {
     display: flex;
     flex-direction: column;
     margin: 0px;
@@ -40,7 +41,8 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('clouds-3488632_1280.jpg');
+    background: linear-gradient(to bottom, #87CEEB 0%, #ffffff 100%);
+    /* Sky blue to white gradient */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -74,32 +76,37 @@ button:hover {
     text-decoration: underline;
     background-color: darkred;
     color: white;
-
 }
 
 .weathercard {
-    padding: 50px;
+    padding: 30px;
+    margin-top: 20px;
     min-width: 300px;
-    box-shadow: 2px 2px 5px black;
+    max-width: 80%;
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    height: 500px;
-    backdrop-filter: blur(20px);
-    background: transparent;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    background: rgba(135, 206, 235, 0.8);
+    /* Sky blue with opacity */
+    border-radius: 10px;
+    color: white;
 }
 
 h1 {
-    font-size: 3.5rem;
-    margin-bottom: 25px;
+    font-size: 3rem;
+    margin-bottom: 15px;
     font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 p {
     font-size: 1.5rem;
-    color: cyan;
+    color: #333;
     font-style: italic;
     margin: 5px 0;
-
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 #temp {
@@ -109,20 +116,22 @@ p {
 
 #humidity {
     font-weight: bold;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 #emoji {
-    font-size: 7.5rem;
+    font-size: 6rem;
     margin: 0;
     font-weight: bold;
 }
 
 #displayerror {
     font-size: 1.5rem;
-    margin-bottom: 10px;
+    margin-top: 10px;
     font-weight: bold;
-}const weatherform = document.querySelector(".weatherform");
+    color: red;
+}
+const weatherform = document.querySelector(".weatherform");
 const inputcity = document.querySelector(".inputcity");
 const weathercard = document.querySelector(".weathercard");
 const apikey = "476f21fc1a1acfb73f2a5c635e1d2505";
