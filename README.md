@@ -59,7 +59,8 @@ Contributions are welcome! If you have any suggestions or improvements, feel fre
 Fork the repository.
 Create a new branch for your feature or bugfix.
 sh
-Copy code
+Copy code<img width="1280" alt="Screenshot 2024-09-03 at 5 27 23 PM" src="https://github.com/user-attachments/assets/d68567c7-2b49-47f2-860f-8953cdfebb8f">
+
 git checkout -b feature/your-feature-name
 Commit your changes.
 sh
